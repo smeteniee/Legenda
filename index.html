@@ -10,7 +10,7 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f8f8f8;
+            background-color: #f0f8ff; /* Светло-голубой фон */
             color: #333;
         }
         .container {
@@ -42,6 +42,7 @@
             height: 200px;
             object-fit: cover;
             border-radius: 10px;
+            cursor: pointer;
         }
         .bouquet h2 {
             margin-top: 15px;
@@ -71,6 +72,53 @@
         .order-button:hover {
             background-color: #2980b9;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .cart {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2ecc71;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        @media screen and (max-width: 768px) {
+            .bouquet-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
@@ -78,34 +126,66 @@
         <h1>Наши букеты</h1>
         <div class="bouquet-grid">
             <div class="bouquet">
-                <img src="https://i.pinimg.com/736x/ed/15/e5/ed15e543a6f55d38bd1d02a78f9f655f.jpg" alt="Романтический букет">
+                <img src="https://i.pinimg.com/736x/ed/15/e5/ed15e543a6f55d38bd1d02a78f9f655f.jpg" alt="Романтический букет" onclick="openModal(this.src)">
                 <h2>Романтический букет</h2>
                 <p>Красные розы и белые лилии</p>
                 <p class="price">250 руб.</p>
-                <button class="order-button" onclick="orderBouquet('Романтический букет')">Заказать</button>
+                <button class="order-button" onclick="addToCart('Романтический букет', 250)">В корзину</button>
             </div>
             <div class="bouquet">
-                <img src="https://avatars.mds.yandex.net/i?id=68140dbaf091ce6e8d0b5a44bee1573de0e7f587-4430278-images-thumbs&n=13" alt="Весенний букет">
+                <img src="https://avatars.mds.yandex.net/i?id=68140dbaf091ce6e8d0b5a44bee1573de0e7f587-4430278-images-thumbs&n=13" alt="Весенний букет" onclick="openModal(this.src)">
                 <h2>Весенний букет</h2>
                 <p>Тюльпаны и нарциссы</p>
                 <p class="price">200 руб.</p>
-                <button class="order-button" onclick="orderBouquet('Весенний букет')">Заказать</button>
+                <button class="order-button" onclick="addToCart('Весенний букет', 200)">В корзину</button>
             </div>
             <div class="bouquet">
-                <img src="https://dostavkatsvetov.ru/upload/iblock/e67/e67048f4fd3d4334ebca249e141253cf.jpg" alt="Экзотический букет">
+                <img src="https://dostavkatsvetov.ru/upload/iblock/e67/e67048f4fd3d4334ebca249e141253cf.jpg" alt="Экзотический букет" onclick="openModal(this.src)">
                 <h2>Экзотический букет</h2>
                 <p>Орхидеи и антуриумы</p>
                 <p class="price">300 руб.</p>
-                <button class="order-button" onclick="orderBouquet('Экзотический букет')">Заказать</button>
+                <button class="order-button" onclick="addToCart('Экзотический букет', 300)">В корзину</button>
             </div>
         </div>
+    </div>
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+    <div class="cart" onclick="showCart()">
+        Корзина (<span id="cartCount">0</span>)
     </div>
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
-        function orderBouquet(bouquetName) {
-            tg.sendData(JSON.stringify({action: 'order', bouquet: bouquetName}));
-            tg.close();
+
+        let cart = [];
+
+        function addToCart(bouquetName, price) {
+            cart.push({name: bouquetName, price: price});
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+
+        function showCart() {
+            let cartContent = cart.map(item => `${item.name} - ${item.price} руб.`).join('\n');
+            let total = cart.reduce((sum, item) => sum + item.price, 0);
+            alert(`Корзина:\n${cartContent}\n\nИтого: ${total} руб.`);
+        }
+
+        function openModal(imgSrc) {
+            var modal = document.getElementById("imageModal");
+            var modalImg = document.getElementById("modalImage");
+            modal.style.display = "block";
+            modalImg.src = imgSrc;
+        }
+
+        function closeModal() {
+            var modal = document.getElementById("imageModal");
+            modal.style.display = "none";
         }
     </script>
 </body>
