@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин цветов</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .bouquet {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .bouquet img {
+            width: 100%;
+            border-radius: 5px;
+        }
+        .bouquet h2 {
+            margin-top: 10px;
+        }
+        .price {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .order-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Наши букеты</h1>
+        <div class="bouquet">
+            <img src="https://i.pinimg.com/736x/ed/15/e5/ed15e543a6f55d38bd1d02a78f9f655f.jpg" alt="Романтический букет">
+            <h2>Романтический букет</h2>
+            <p>Красные розы и белые лилии</p>
+            <p class="price">250 руб.</p>
+            <button class="order-button" onclick="orderBouquet('Романтический букет')">Заказать</button>
+        </div>
+        <div class="bouquet">
+            <img src="https://avatars.mds.yandex.net/i?id=68140dbaf091ce6e8d0b5a44bee1573de0e7f587-4430278-images-thumbs&n=13" alt="Весенний букет">
+            <h2>Весенний букет</h2>
+            <p>Тюльпаны и нарциссы</p>
+            <p class="price">200 руб.</p>
+            <button class="order-button" onclick="orderBouquet('Весенний букет')">Заказать</button>
+        </div>
+        <div class="bouquet">
+            <img src="https://dostavkatsvetov.ru/upload/iblock/e67/e67048f4fd3d4334ebca249e141253cf.jpg" alt="Экзотический букет">
+            <h2>Экзотический букет</h2>
+            <p>Орхидеи и антуриумы</p>
+            <p class="price">300 руб.</p>
+            <button class="order-button" onclick="orderBouquet('Экзотический букет')">Заказать</button>
+        </div>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        function orderBouquet(bouquetName) {
+            tg.sendData(JSON.stringify({action: 'order', bouquet: bouquetName}));
+            tg.close();
+        }
+    </script>
+</body>
+</html>
