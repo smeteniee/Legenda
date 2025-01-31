@@ -7,35 +7,55 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f0f0f0;
+            background-color: #f8f8f8;
+            color: #333;
         }
         .container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #4a4a4a;
+            margin-bottom: 30px;
+        }
+        .bouquet-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
         .bouquet {
             background-color: white;
-            border-radius: 10px;
+            border-radius: 15px;
             padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .bouquet:hover {
+            transform: translateY(-5px);
         }
         .bouquet img {
             width: 100%;
-            border-radius: 5px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
         }
         .bouquet h2 {
-            margin-top: 10px;
+            margin-top: 15px;
+            font-size: 1.2em;
+            color: #2c3e50;
         }
         .price {
             font-weight: bold;
-            color: #4CAF50;
+            color: #e74c3c;
+            font-size: 1.1em;
+            margin: 10px 0;
         }
         .order-button {
-            background-color: #4CAF50;
+            background-color: #3498db;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -46,39 +66,43 @@
             margin-top: 10px;
             cursor: pointer;
             border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .order-button:hover {
+            background-color: #2980b9;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Наши букеты</h1>
-        <div class="bouquet">
-            <img src="https://i.pinimg.com/736x/ed/15/e5/ed15e543a6f55d38bd1d02a78f9f655f.jpg" alt="Романтический букет">
-            <h2>Романтический букет</h2>
-            <p>Красные розы и белые лилии</p>
-            <p class="price">250 руб.</p>
-            <button class="order-button" onclick="orderBouquet('Романтический букет')">Заказать</button>
-        </div>
-        <div class="bouquet">
-            <img src="https://avatars.mds.yandex.net/i?id=68140dbaf091ce6e8d0b5a44bee1573de0e7f587-4430278-images-thumbs&n=13" alt="Весенний букет">
-            <h2>Весенний букет</h2>
-            <p>Тюльпаны и нарциссы</p>
-            <p class="price">200 руб.</p>
-            <button class="order-button" onclick="orderBouquet('Весенний букет')">Заказать</button>
-        </div>
-        <div class="bouquet">
-            <img src="https://dostavkatsvetov.ru/upload/iblock/e67/e67048f4fd3d4334ebca249e141253cf.jpg" alt="Экзотический букет">
-            <h2>Экзотический букет</h2>
-            <p>Орхидеи и антуриумы</p>
-            <p class="price">300 руб.</p>
-            <button class="order-button" onclick="orderBouquet('Экзотический букет')">Заказать</button>
+        <div class="bouquet-grid">
+            <div class="bouquet">
+                <img src="https://i.pinimg.com/736x/ed/15/e5/ed15e543a6f55d38bd1d02a78f9f655f.jpg" alt="Романтический букет">
+                <h2>Романтический букет</h2>
+                <p>Красные розы и белые лилии</p>
+                <p class="price">250 руб.</p>
+                <button class="order-button" onclick="orderBouquet('Романтический букет')">Заказать</button>
+            </div>
+            <div class="bouquet">
+                <img src="https://avatars.mds.yandex.net/i?id=68140dbaf091ce6e8d0b5a44bee1573de0e7f587-4430278-images-thumbs&n=13" alt="Весенний букет">
+                <h2>Весенний букет</h2>
+                <p>Тюльпаны и нарциссы</p>
+                <p class="price">200 руб.</p>
+                <button class="order-button" onclick="orderBouquet('Весенний букет')">Заказать</button>
+            </div>
+            <div class="bouquet">
+                <img src="https://dostavkatsvetov.ru/upload/iblock/e67/e67048f4fd3d4334ebca249e141253cf.jpg" alt="Экзотический букет">
+                <h2>Экзотический букет</h2>
+                <p>Орхидеи и антуриумы</p>
+                <p class="price">300 руб.</p>
+                <button class="order-button" onclick="orderBouquet('Экзотический букет')">Заказать</button>
+            </div>
         </div>
     </div>
-
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
-
         function orderBouquet(bouquetName) {
             tg.sendData(JSON.stringify({action: 'order', bouquet: bouquetName}));
             tg.close();
