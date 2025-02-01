@@ -113,64 +113,67 @@ function updateUserInfo() {
     }
 }
 
-        function authenticateUser() {
-            fetch('/auth', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(currentUser)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    loadUserData();
-                } else {
-                    console.error('Authentication failed');
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        }
+		function authenticateUser() {
+			fetch('/auth', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(currentUser)
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					loadUserData();
+				} else {
+					console.error('Authentication failed');
+				}
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+		}
 
-        function loadUserData() {
-            fetch(`/user/${currentUser.id}/data`)
-            .then(response => response.json())
-            .then(data => {
-                cart = data.cart;
-                ordersHistory = data.ordersHistory;
-                updateCartCount();
-                updateOrdersHistory();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        }
+		function loadUserData() {
+			if (currentUser) {
+				fetch(`/user/${currentUser.id}/data`)
+				.then(response => response.json())
+				.then(data => {
+					cart = data.cart;
+					ordersHistory = data.ordersHistory;
+					updateCartCount();
+					updateOrdersHistory();
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
+			}
+		}
 
-        function saveUserData() {
-            if (currentUser) {
-                fetch(`/user/${currentUser.id}/data`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        cart: cart,
-                        ordersHistory: ordersHistory
-                    }),
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            }
-        }
+		function saveUserData() {
+			if (currentUser) {
+				fetch(`/user/${currentUser.id}/data`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						cart: cart,
+						ordersHistory: ordersHistory
+					}),
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
+			}
+		}
 
 		function initializePage() {
 			if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
 				currentUser = tg.initDataUnsafe.user;
 				updateUserInfo();
 				authenticateUser();
+				loadUserData();
 			} else {
 				console.warn('User is not authenticated via Telegram');
 				document.getElementById('userInfo').textContent = 'Пожалуйста, откройте приложение в Telegram';
