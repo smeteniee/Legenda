@@ -5,183 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Магазин цветов</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f8ff;
-            color: #333;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        h1 {
-            text-align: center;
-            color: #4a4a4a;
-            margin-bottom: 30px;
-        }
-        .bouquet-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-        .bouquet {
-            background-color: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        .bouquet:hover {
-            transform: translateY(-5px);
-        }
-        .bouquet img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-        .bouquet h2 {
-            margin-top: 15px;
-            font-size: 1.2em;
-            color: #2c3e50;
-        }
-        .price {
-            font-weight: bold;
-            color: #e74c3c;
-            font-size: 1.1em;
-            margin: 10px 0;
-        }
-        .order-button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: auto;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        .order-button:hover {
-            background-color: #2980b9;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.9);
-        }
-        .modal-content {
-            margin: auto;
-            display: block;
-            width: 80%;
-            max-width: 700px;
-        }
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .close:hover,
-        .close:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .cart {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #2ecc71;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #checkoutPage {
-            display: none;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .back-button {
-            background-color: #95a5a6;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        @media screen and (max-width: 768px) {
-            .bouquet-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div id="userInfo"></div>
     <div class="container" id="mainPage">
         <h1>Наши букеты</h1>
         <div class="bouquet-grid">
             <div class="bouquet">
-                <img src="https://i.pinimg.com/736x/ed/15/e5/ed15e543a6f55d38bd1d02a78f9f655f.jpg" alt="Романтический букет" onclick="openModal(this.src)">
+                <img src="https://i.pinimg.com/736x/ed/15/e5/ed15e543a6f55d38bd1d02a78f9f655f.jpg" alt="Романтический букет">
                 <h2>Романтический букет</h2>
                 <p>Красные розы и белые лилии</p>
                 <p class="price">250 руб.</p>
-                <button class="order-button" onclick="addToCart('Романтический букет', 250)">В корзину</button>
+                <div class="quantity-control">
+                    <button onclick="changeQuantity('Романтический букет', -1, 250)">-</button>
+                    <span id="quantity-Романтический букет">0</span>
+                    <button onclick="changeQuantity('Романтический букет', 1, 250)">+</button>
+                </div>
             </div>
             <div class="bouquet">
-                <img src="https://avatars.mds.yandex.net/i?id=68140dbaf091ce6e8d0b5a44bee1573de0e7f587-4430278-images-thumbs&n=13" alt="Весенний букет" onclick="openModal(this.src)">
+                <img src="https://avatars.mds.yandex.net/i?id=68140dbaf091ce6e8d0b5a44bee1573de0e7f587-4430278-images-thumbs&n=13" alt="Весенний букет">
                 <h2>Весенний букет</h2>
                 <p>Тюльпаны и нарциссы</p>
                 <p class="price">200 руб.</p>
-                <button class="order-button" onclick="addToCart('Весенний букет', 200)">В корзину</button>
+                <div class="quantity-control">
+                    <button onclick="changeQuantity('Весенний букет', -1, 200)">-</button>
+                    <span id="quantity-Весенний букет">0</span>
+                    <button onclick="changeQuantity('Весенний букет', 1, 200)">+</button>
+                </div>
             </div>
             <div class="bouquet">
-                <img src="https://dostavkatsvetov.ru/upload/iblock/e67/e67048f4fd3d4334ebca249e141253cf.jpg" alt="Экзотический букет" onclick="openModal(this.src)">
+                <img src="https://dostavkatsvetov.ru/upload/iblock/e67/e67048f4fd3d4334ebca249e141253cf.jpg" alt="Экзотический букет">
                 <h2>Экзотический букет</h2>
                 <p>Орхидеи и антуриумы</p>
                 <p class="price">300 руб.</p>
-                <button class="order-button" onclick="addToCart('Экзотический букет', 300)">В корзину</button>
+                <div class="quantity-control">
+                    <button onclick="changeQuantity('Экзотический букет', -1, 300)">-</button>
+                    <span id="quantity-Экзотический букет">0</span>
+                    <button onclick="changeQuantity('Экзотический букет', 1, 300)">+</button>
+                </div>
             </div>
         </div>
     </div>
-
-    <div id="checkoutPage" style="display:none;">
+    <div id="checkoutPage">
         <h2>Оформление заказа</h2>
         <form id="checkoutForm">
             <div class="form-group">
@@ -212,57 +78,263 @@
         </form>
         <button class="back-button" onclick="showMainPage()">Вернуться к витрине</button>
     </div>
-
-    <div id="imageModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="modalImage">
+    <div id="orderTrackingPage">
+        <h2>Отслеживание заказа</h2>
+        <div id="orderStatus" class="order-status"></div>
+        <div id="orderItems" class="order-items"></div>
+        <button class="back-button" onclick="showMainPage()">Вернуться к витрине</button>
     </div>
-
+    <div id="ordersHistoryPage">
+        <h2>История заказов</h2>
+        <div id="ordersHistory"></div>
+        <button class="back-button" onclick="showMainPage()">Вернуться к витрине</button>
+    </div>
     <div class="cart" onclick="showCheckout()">
         Корзина (<span id="cartCount">0</span>)
     </div>
-
+    <div class="orders-history" onclick="showOrdersHistory()">
+        История заказов
+    </div>
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
-        let cart = [];
+        let cart = {};
+        let currentOrder = null;
+        let ordersHistory = [];
+        let currentUser = null;
 
-        function addToCart(bouquetName, price) {
-            cart.push({name: bouquetName, price: price});
+ 
+
+function updateUserInfo() {
+    if (currentUser) {
+        document.getElementById('userInfo').textContent = `Пользователь: ${currentUser.first_name} ${currentUser.last_name}`;
+        // Удалите эту строку
+        // document.getElementById('loginButton').style.display = 'none';
+    }
+}
+
+        function authenticateUser() {
+            fetch('/auth', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(currentUser)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    loadUserData();
+                } else {
+                    console.error('Authentication failed');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        function loadUserData() {
+            fetch(`/user/${currentUser.id}/data`)
+            .then(response => response.json())
+            .then(data => {
+                cart = data.cart;
+                ordersHistory = data.ordersHistory;
+                updateCartCount();
+                updateOrdersHistory();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        function saveUserData() {
+            if (currentUser) {
+                fetch(`/user/${currentUser.id}/data`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        cart: cart,
+                        ordersHistory: ordersHistory
+                    }),
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+        }
+
+		function initializePage() {
+			if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+				currentUser = tg.initDataUnsafe.user;
+				updateUserInfo();
+				authenticateUser();
+			} else {
+				console.warn('User is not authenticated via Telegram');
+				document.getElementById('userInfo').textContent = 'Пожалуйста, откройте приложение в Telegram';
+			}
+
+			if (sessionStorage.getItem('currentOrder')) {
+				currentOrder = JSON.parse(sessionStorage.getItem('currentOrder'));
+				showOrderTracking();
+			} else {
+				showMainPage();
+			}
+		}
+
+        function changeQuantity(bouquetName, change, price) {
+            let quantityElement = document.getElementById(`quantity-${bouquetName}`);
+            let currentQuantity = parseInt(quantityElement.textContent);
+            let newQuantity = Math.max(0, currentQuantity + change);
+            quantityElement.textContent = newQuantity;
+            if (change > 0) {
+                if (cart[bouquetName]) {
+                    cart[bouquetName].quantity++;
+                } else {
+                    cart[bouquetName] = { price: price, quantity: 1 };
+                }
+            } else if (change < 0 && cart[bouquetName]) {
+                cart[bouquetName].quantity--;
+                if (cart[bouquetName].quantity === 0) {
+                    delete cart[bouquetName];
+                }
+            }
+            sessionStorage.setItem('cart', JSON.stringify(cart));
             updateCartCount();
+			saveUserData();
         }
-
         function updateCartCount() {
-            document.getElementById('cartCount').textContent = cart.length;
+            let total = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = total;
         }
-
-        function showCheckout() {
-            document.getElementById('mainPage').style.display = 'none';
-            document.getElementById('checkoutPage').style.display = 'block';
-        }
-
         function showMainPage() {
             document.getElementById('mainPage').style.display = 'block';
             document.getElementById('checkoutPage').style.display = 'none';
+            document.getElementById('orderTrackingPage').style.display = 'none';
+            document.getElementById('ordersHistoryPage').style.display = 'none';
         }
-
-        function openModal(imgSrc) {
-            var modal = document.getElementById("imageModal");
-            var modalImg = document.getElementById("modalImage");
-            modal.style.display = "block";
-            modalImg.src = imgSrc;
+        function showCheckout() {
+            document.getElementById('mainPage').style.display = 'none';
+            document.getElementById('checkoutPage').style.display = 'block';
+            document.getElementById('orderTrackingPage').style.display = 'none';
+            document.getElementById('ordersHistoryPage').style.display = 'none';
         }
-
-        function closeModal() {
-            var modal = document.getElementById("imageModal");
-            modal.style.display = "none";
+        function showOrderTracking() {
+            document.getElementById('mainPage').style.display = 'none';
+            document.getElementById('checkoutPage').style.display = 'none';
+            document.getElementById('orderTrackingPage').style.display = 'block';
+            document.getElementById('ordersHistoryPage').style.display = 'none';
+            updateOrderStatus();
         }
-
+        function showOrdersHistory() {
+            document.getElementById('mainPage').style.display = 'none';
+            document.getElementById('checkoutPage').style.display = 'none';
+            document.getElementById('orderTrackingPage').style.display = 'none';
+            document.getElementById('ordersHistoryPage').style.display = 'block';
+            updateOrdersHistory();
+        }
+        function updateOrderStatus() {
+            if (currentOrder) {
+                document.getElementById('orderStatus').textContent = `Статус заказа: ${currentOrder.status}`;
+                let orderItemsHtml = '';
+                for (let item in currentOrder.items) {
+                    orderItemsHtml += `<div class="order-item">${item}: ${currentOrder.items[item].quantity} шт.</div>`;
+                }
+                document.getElementById('orderItems').innerHTML = orderItemsHtml;
+            }
+        }
+        function updateOrdersHistory() {
+            let historyHtml = '';
+            for (let order of ordersHistory) {
+                historyHtml += `<div class="order-item">
+                    <p>Дата: ${order.date}</p>
+                    <p>Статус: ${order.status}</p>
+                    <p>Сумма: ${order.total} руб.</p>
+                </div>`;
+            }
+            document.getElementById('ordersHistory').innerHTML = historyHtml;
+        }
         document.getElementById('checkoutForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            // Здесь можно добавить логику отправки заказа
-            alert('Заказ оформлен!');
+            let formData = new FormData(e.target);
+            let order = Object.fromEntries(formData.entries());
+            order.items = cart;
+            order.status = 'В обработке';
+            order.date = new Date().toLocaleString();
+            order.total = Object.values(cart).reduce((sum, item) => sum + item.price * item.quantity, 0);
+            
+            currentOrder = order;
+            sessionStorage.setItem('currentOrder', JSON.stringify(currentOrder));
+            
+            ordersHistory.push(order);
+            localStorage.setItem('ordersHistory', JSON.stringify(ordersHistory));
+            fetch('https://api.telegram.org/bot7039127869:AAHll3tkS1n7qXhxfwzf31DT5B7dep4n4Bs/sendMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: '-4786580321',
+                    text: `Новый заказ:\n${JSON.stringify(order, null, 2)}`,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    alert('Заказ оформлен и отправлен!');
+                    cart = {};
+                    updateCartCount();
+                    sessionStorage.removeItem('cart');
+                    showOrderTracking();
+                } else {
+                    alert('Ошибка при отправке заказа. Попробуйте еще раз.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Произошла ошибка. Попробуйте еще раз.');
+            });
+			saveUserData();
         });
+        setInterval(() => {
+            if (currentOrder) {
+                const statuses = ['В обработке', 'Делается', 'Ожидает курьера', 'Доставляется', 'Доставлен'];
+                const currentIndex = statuses.indexOf(currentOrder.status);
+                const nextIndex = (currentIndex + 1) % statuses.length;
+                currentOrder.status = statuses[nextIndex];
+                sessionStorage.setItem('currentOrder', JSON.stringify(currentOrder));
+                updateOrderStatus();
+            }
+        }, 30000);
+        function clearOrderHistory() {
+            ordersHistory = [];
+            localStorage.removeItem('ordersHistory');
+            updateOrdersHistory();
+        }
+ 
+		
+		window.onload = function() {
+			initializePage();
+		};
+
+        tg.onEvent('viewportChanged', function() {
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                currentUser = tg.initDataUnsafe.user;
+                updateUserInfo();
+                authenticateUser();
+            }
+        });
+
+        tg.onEvent('mainButtonClicked', function() {
+            if (currentUser) {
+                showCheckout();
+            }  
+        });
+		
+		
+		
     </script>
 </body>
 </html>
